@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - collada - skinning</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				background:#777;
+				padding:0;
+				margin:0;
+				overflow:hidden;
+			}
+			#info {
+				position: absolute;
+				top: 0px;
+				width: 100%;
+				color: #ffffff;
+				padding: 5px;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+			}
+			a {
+				color: #ffffff;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="container"></div>
+		<h1 id="info" style="color: white;"></h1>
+		<div id="info">
+			<!--<a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> collada loader - skinning
+			| Dancing Stormtrooper <a href="https://sketchfab.com/strykerdoesgames" target="_blank" rel="noopener">StrykerDoesAnimation</a> is licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC Attribution</a>-->
+		</div>
+
+		<script src="js/three.js"></script>
+		<script src="js/ColladaLoader2.js"></script>
+		<script src="js/OrbitControls.js"></script>
+		<script src="js/Detector.js"></script>
+		<script src="js/stats.min.js"></script>
+
+		<script>
+			let container = document.querySelector('#container');
+			let info = document.querySelector('#info');
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+			var renderer = new THREE.WebGLRenderer();
+			var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+			var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+			var cube = new THREE.Mesh( geometry, material );
+
+			var materialLine = new THREE.LineBasicMaterial({ color: 0x0000ff });
+			var geometryLine = new THREE.Geometry();
+			geometryLine.vertices.push(new THREE.Vector3(-10, 0, 0));
+			geometryLine.vertices.push(new THREE.Vector3(0, 10, 0));
+			geometryLine.vertices.push(new THREE.Vector3(10, 0, 0));
+			var line = new THREE.Line(geometryLine, materialLine);
+
+            (function() {
+				if (Detector.webgl) {
+					// Initiate function or other initializations here
+					animate();
+				} else {
+					var warning = Detector.getWebGLErrorMessage();
+					document.getElementById('container').appendChild(warning);
+					return;
+				}
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				container.appendChild( renderer.domElement );
+
+				scene.add( cube );
+				scene.add( line );
+
+				camera.position.z = 5;
+			})();
+
+			function animate() {
+				requestAnimationFrame( animate );
+				renderer.render( scene, camera );
+				cube.rotation.y += 0.01;
+				info.innerText = cube.rotation.y;
+				if(cube.rotation.y > 5.5)
+					cube.rotation.y = 5.5;
+			}
+		</script>
+
+	</body>
+</html>
